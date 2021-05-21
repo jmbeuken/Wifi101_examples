@@ -16,8 +16,8 @@
   by Tom Igoe
 */
 
-//#include <WiFi101.h>      // use this for MKR1000 boards
-#include <WiFiNINA.h>       // use this for MKR1010 and Nano 33 IoT boards
+#include <WiFi101.h>      // use this for MKR1000 boards
+//#include <WiFiNINA.h>       // use this for MKR1010 and Nano 33 IoT boards
 #include <WiFiUdp.h>
 #include <RTCZero.h>
 #include "arduino_secrets.h"
@@ -37,7 +37,7 @@ void setup() {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(WiFi.status());
     // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
-    status = WiFi.begin(SECRET_SSID, SECRET_PASS);
+    WiFi.begin(SECRET_SSID, SECRET_PASS);
     // wait 2 seconds for connection:
     delay(2000);
   }
