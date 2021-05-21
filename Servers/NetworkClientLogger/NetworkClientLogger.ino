@@ -12,10 +12,13 @@
   created 18 April 2019
   modified 17 Jan 2021
   by Tom Igoe
+  
+  modified 21 May 2021
+  by Jean-Michel Beuken
 */
 
-//#include <WiFi101.h>    // use this for the MKR1000
-#include <WiFiNINA.h>     // use this for the MKR1010 and Nano 33 IoT
+#include <WiFi101.h>    // use this for the MKR1000
+//#include <WiFiNINA.h>     // use this for the MKR1010 and Nano 33 IoT
 #include <SD.h>
 #include <RTCZero.h>
 #include "arduino_secrets.h"
@@ -70,9 +73,9 @@ void setup() {
   http.begin();
   https.begin();
   httpAlt.begin();
-  ssh.begin();
-  smtp.begin();
-  smtps.begin();
+  //ssh.begin();
+  //smtp.begin();
+  //smtps.begin();
 }
 
 void loop() {
@@ -80,9 +83,9 @@ void loop() {
   getClient(http, 80);
   getClient(https, 443);
   getClient(httpAlt, 8080);
-  getClient(ssh, 22);
-  getClient(smtp, 25);
-  getClient(smtps, 587);
+  //getClient(ssh, 22);
+  //getClient(smtp, 25);
+  //getClient(smtps, 587);
 }
 
 void getClient(WiFiServer server, int myPort) {
@@ -98,7 +101,7 @@ void getClient(WiFiServer server, int myPort) {
     logEntry += getTimeStamp();
     logEntry += "\nincoming port: ";
     logEntry += String(myPort);
-    logEntry += "ipAddr: ";
+    logEntry += "\nipAddr: ";
     logEntry += client.remoteIP();
     logEntry += ":";
     logEntry += client.remotePort();
@@ -152,26 +155,30 @@ void connectToNetwork() {
   startTime = rtc.getEpoch();
   // increment the reconnect count:
   reconnects++;
+      
+  String logEntry = "connected to: ";
+  logEntry += String(SECRET_SSID);
+  logEntry += "\ntime: ";
+  logEntry += getTimeStamp();
+  logEntry += "\n";
+  logEntry += "reconnects: ";
+  logEntry += String(reconnects);
+  
   if (SDAvailable) {
     File dataFile = SD.open(logFile, FILE_WRITE);
-    String logEntry = "connected to: ";
-    logEntry += String(SECRET_SSID);
-    logEntry += "\ntime: ";
-    logEntry += getTimeStamp();
-    logEntry += "\n";
-    logEntry += "reconnects: ";
-    logEntry += String(reconnects);
-
     if (dataFile) {
       dataFile.println(logEntry);
       dataFile.close();
     }
   }
-  if (Serial) Serial.println(logEntry));
-    if (Serial) Serial.println(getTimeStamp());
-      IPAddress ip = WiFi.localIP();
-      if (Serial) Serial.println(ip);
-    }
+  if (Serial) { 
+    Serial.println(logEntry);
+    Serial.println(getTimeStamp());
+    IPAddress ip = WiFi.localIP();
+    Serial.println(ip);
+    Serial.println("-----");
+  }
+}
 
 // format the time as hh:mm:ss
 String getTimeStamp() {
